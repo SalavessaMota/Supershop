@@ -1,4 +1,4 @@
-﻿namespace Supershop.Data
+﻿namespace Supershop.Data.Entities
 {
     public interface IEntity
     {
