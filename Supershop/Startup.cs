@@ -8,6 +8,11 @@ using Microsoft.Extensions.Hosting;
 using Supershop.Data;
 using Supershop.Data.Entities;
 using Supershop.Helpers;
+using System;
+using Microsoft.Extensions.Azure;
+using Azure.Storage.Queues;
+using Azure.Storage.Blobs;
+using Azure.Core.Extensions;
 
 namespace Supershop
 {

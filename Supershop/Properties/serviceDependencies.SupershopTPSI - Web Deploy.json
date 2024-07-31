@@ -7,6 +7,14 @@
       "type": "mssql.azure",
       "connectionId": "ConnectionStrings:DefaultConnection",
       "dynamicId": null
+    },
+    "storage1": {
+      "serviceConnectorResourceId": "/subscriptions/[parameters('subscriptionId')]/resourcegroups/[parameters('resourceGroupName')]/providers/Microsoft.Web/sites/SupershopTPSI/providers/Microsoft.ServiceLinker/linkers/BlobConnectionString_90E63E7788, /subscriptions/36fb81a2-07a7-4d9e-ac26-d0ccc93e5d9f/resourcegroups/SuperShopResourceGroup/providers/Microsoft.Web/sites/SupershopTPSI/providers/Microsoft.ServiceLinker/linkers/BlobConnectionString_1AF4C8B75F",
+      "secretStore": "AzureAppSettings",
+      "resourceId": "/subscriptions/[parameters('subscriptionId')]/resourceGroups/[parameters('resourceGroupName')]/providers/Microsoft.Storage/storageAccounts/supershoptpsi",
+      "type": "storage.azure",
+      "connectionId": "Blob:ConnectionString",
+      "dynamicId": null
     }
   }
 }
