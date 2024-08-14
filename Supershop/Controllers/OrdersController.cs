@@ -1,8 +1,9 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿using Supershop.Models;
+using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Supershop.Data;
-using Supershop.Models;
-using System.Threading.Tasks;
+
 
 namespace Supershop.Controllers
 {
@@ -37,6 +38,18 @@ namespace Supershop.Controllers
                 Quantity = 1,
                 Products = _productRepository.GetComboProducts()
             };
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> AddProduct(AddItemViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                await _orderRepository.AddItemToOrderAsync(model, User.Identity.Name);
+                return RedirectToAction("Create");
+            }
 
             return View(model);
         }
