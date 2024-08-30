@@ -52,7 +52,7 @@ namespace Supershop.Controllers
             return View(product);
         }
 
-        [Authorize(Roles = "Admin")]
+        
         // GET: Products/Create
         public IActionResult Create()
         {
@@ -165,11 +165,30 @@ namespace Supershop.Controllers
         // POST: Products/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
             var product = await _productRepository.GetByIdAsync(id);
-            await _productRepository.DeleteAsync(product);
-            return RedirectToAction(nameof(Index));
+
+            try
+            {
+                //throw new Exception("Excepção de Teste");
+                await _productRepository.DeleteAsync(product);
+                return RedirectToAction(nameof(Index));
+            }
+            catch (DbUpdateException ex)
+            {
+
+                if (ex.InnerException != null && ex.InnerException.Message.Contains("DELETE"))
+                {
+                    ViewBag.ErrorTitle = $"{product.Name} is probably being used!!";
+                    ViewBag.ErrorMessage = $"{product.Name} can't be deleted because there are orders that use it.</br></br>" +
+                                           $"If you want to delete this product, please remove the orders that are using it," +
+                                           $"and then try to delete it again.";
+                }
+
+                return View("Error");
+            }
         }
 
         public IActionResult ProductNotFound()
