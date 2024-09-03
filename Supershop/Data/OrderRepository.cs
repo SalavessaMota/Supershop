@@ -109,6 +109,19 @@ namespace Supershop.Data
             await _context.SaveChangesAsync();
         }
 
+        public async Task DeliverOrder(DeliveryViewModel model)
+        {
+            var order = await _context.Orders.FindAsync(model.Id);
+            if(order == null)
+            {
+                return;
+            }
+
+            order.DeliveryDate = model.DeliveryDate;
+            _context.Orders.Update(order);
+            await _context.SaveChangesAsync();
+        }
+
         public async Task<IQueryable<OrderDetailTemp>> GetDetailTempsAsync(string userName)
         {
             var user = await _userHelper.GetUserByEmailAsync(userName);
@@ -121,6 +134,11 @@ namespace Supershop.Data
                 .Include(p => p.Product)
                 .Where(o => o.User == user)
                 .OrderBy(o => o.Product.Name);
+        }
+
+        public async Task<Order> GetOrderAsync(int id)
+        {
+            return await _context.Orders.FindAsync(id);
         }
 
         public async Task<IQueryable<Order>> GetOrdersAsync(string userName)
