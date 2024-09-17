@@ -1,9 +1,11 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Supershop.Data;
 using Supershop.Data.Entities;
 using Supershop.Models;
+using Vereyon.Web;
 
 
 namespace Supershop.Controllers
@@ -12,10 +14,15 @@ namespace Supershop.Controllers
     public class CountriesController : Controller
     {
         private readonly ICountryRepository _countryRepository;
+        private readonly IFlashMessage _flashMessage;
 
-        public CountriesController(ICountryRepository countryRepository)
+        public CountriesController(
+            ICountryRepository countryRepository,
+            IFlashMessage flashMessage
+            )
         {
             _countryRepository = countryRepository;
+            _flashMessage = flashMessage;
         }
 
         public async Task<IActionResult> DeleteCity(int? id)
@@ -129,8 +136,17 @@ namespace Supershop.Controllers
         {
             if (ModelState.IsValid)
             {
-                await _countryRepository.CreateAsync(country);
-                return RedirectToAction(nameof(Index));
+                try
+                {
+                    await _countryRepository.CreateAsync(country);
+                    return RedirectToAction(nameof(Index));
+                }
+                catch (Exception)
+                {
+                    _flashMessage.Danger("This country already exists!");
+                }
+
+                return View(country);
             }
 
             return View(country);
